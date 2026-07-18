@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="min-h-screen grid place-items-center px-6">
+  <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[1fr_420px] bg-white shadow-sm border border-slate-200">
+    <section class="p-8 lg:p-10 bg-slate-950 text-white">
+      <div class="text-3xl font-semibold">LoadFlow</div>
+      <p class="mt-3 text-slate-300 max-w-xl">Freight brokerage operations with real RBAC, compliance gating, rate confirmations, and shipment audit trails.</p>
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {% for demo in users %}
+        <form method="post" action="/demo-login">
+          <input type="hidden" name="user_id" value="{{ demo.id }}">
+          <button class="w-full text-left rounded-md border border-white/10 bg-white/5 p-4 hover:bg-white/10">
+            <div class="font-medium">{{ demo.name }}</div>
+            <div class="text-xs text-slate-300">{{ demo.email }}</div>
+            <div class="mt-2 text-xs uppercase tracking-wide text-sky-300">{{ demo.account_type }}</div>
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+    </section>
+    <section class="p-8 lg:p-10">
+      <h1 class="text-2xl font-semibold">Sign in</h1>
+      <p class="mt-2 text-sm text-slate-600">Use a demo persona or email/password. Demo password is <span class="font-mono">demo123</span>.</p>
+      {% if error %}<div class="mt-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{{ error }}</div>{% endif %}
+      <form class="mt-6 space-y-4" method="post" action="/login">
+        <label class="block text-sm font-medium">Email
+          <input class="input mt-1" name="email" type="email" required>
+        </label>
+        <label class="block text-sm font-medium">Password
+          <input class="input mt-1" name="password" type="password" required>
+        </label>
+        <button class="btn-primary w-full">Sign in</button>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

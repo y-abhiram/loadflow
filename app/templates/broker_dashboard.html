@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <p class="eyebrow">Broker Operations</p>
+    <h1 class="page-title">Load board control center</h1>
+  </div>
+  {% if 'load.create' in permissions %}<a class="btn-primary" href="/loads/new">Create Load</a>{% endif %}
+</header>
+<section class="content-grid">
+  <div class="panel lg:col-span-2">
+    <div class="panel-head">
+      <h2>Active Loads</h2>
+      <a class="text-sm font-medium text-sky-700" href="/loads">Open board</a>
+    </div>
+    {% include "_load_table.html" %}
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h2>Compliance Alerts</h2></div>
+    <div class="space-y-3">
+      {% for load in alerts %}
+      <a href="/loads/{{ load.id }}" class="block rounded-md border border-red-200 bg-red-50 p-3">
+        <div class="font-medium text-red-900">{{ load.reference }}</div>
+        <div class="text-sm text-red-700">{{ load.compliance_reason }}</div>
+      </a>
+      {% else %}
+      <p class="text-sm text-slate-600">No unresolved compliance flags.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

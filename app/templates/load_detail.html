@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <p class="eyebrow">{{ load.reference }}</p>
+    <h1 class="page-title">{{ load.origin }} to {{ load.destination }}</h1>
+  </div>
+  <span class="badge text-base">{{ load.status }}</span>
+</header>
+<section class="content-grid">
+  <div class="space-y-6 lg:col-span-2">
+    <div class="panel">
+      <div class="panel-head"><h2>Shipment</h2></div>
+      <dl class="detail-grid">
+        <div><dt>Shipper</dt><dd>{{ load.shipper.company_name }}</dd></div>
+        <div><dt>Broker</dt><dd>{{ load.broker_org.name }}</dd></div>
+        <div><dt>Carrier</dt><dd>{{ load.carrier_org.name if load.carrier_org else 'Unassigned' }}</dd></div>
+        <div><dt>Equipment</dt><dd>{{ load.equipment_type }}</dd></div>
+        <div><dt>Commodity</dt><dd>{{ load.commodity_type }}</dd></div>
+      </dl>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Audit Trail</h2></div>
+      <ol class="timeline">
+        {% for event in load.audits %}
+        <li>
+          <div class="font-medium">{{ event.event_type.replace('_', ' ')|title }}</div>
+          <div class="text-sm text-slate-600">{{ event.created_at.strftime('%Y-%m-%d %H:%M') }} by {{ event.actor.name }}</div>
+          {% if event.note %}<div class="text-sm text-slate-700 mt-1">{{ event.note }}</div>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <aside class="space-y-6">
+    <div class="panel">
+      <div class="panel-head"><h2>Compliance</h2></div>
+      {% if load.compliance_flag and not load.compliance_overridden %}
+      <div class="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-800">{{ load.compliance_reason }}</div>
+      {% elif load.compliance_overridden %}
+      <div class="rounded-md bg-amber-50 border border-amber-200 p-3 text-sm text-amber-900">Flag overridden: {{ load.compliance_reason }}</div>
+      {% else %}
+      <div class="rounded-md bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-800">Carrier compliance clear.</div>
+      {% endif %}
+      {% if 'load.override_compliance_flag' in permissions and load.compliance_flag and not load.compliance_overridden %}
+      <form class="mt-3" method="post" action="/loads/{{ load.id }}/override"><button class="btn-danger w-full">Override Flag</button></form>
+      {% endif %}
+    </div>
+    {% if 'load.assign_carrier' in permissions %}
+    <div class="panel">
+      <div class="panel-head"><h2>Assign Carrier</h2></div>
+      <form class="space-y-3" method="post" action="/loads/{{ load.id }}/assign">
+        <select class="input" name="carrier_org_id">
+          {% for carrier in carriers %}<option value="{{ carrier.id }}">{{ carrier.name }}</option>{% endfor %}
+        </select>
+        <button class="btn-secondary w-full">Assign</button>
+      </form>
+    </div>
+    {% endif %}
+    {% if 'rate.confirm' in permissions %}
+    <div class="panel">
+      <div class="panel-head"><h2>Rate Confirmation</h2></div>
+      <div class="space-y-2 mb-3 text-sm">
+        {% for rate in load.rates %}
+        <div class="rounded-md border p-2">v{{ rate.version }} - {{ rate.base_rate_cents|money }} + {{ rate.accessorials_cents|money }}</div>
+        {% else %}
+        <p class="text-slate-600">No rate confirmed yet.</p>
+        {% endfor %}
+      </div>
+      <form class="space-y-3" method="post" action="/loads/{{ load.id }}/rate">
+        <input class="input" type="number" name="base_rate" value="2400" placeholder="Base rate">
+        <input class="input" type="number" name="accessorials" value="150" placeholder="Accessorials">
+        <input class="input" name="notes" placeholder="Notes">
+        <button class="btn-primary w-full">Confirm Rate Version</button>
+      </form>
+    </div>
+    {% endif %}
+    {% if next_status and 'load.update_status' in permissions %}
+    <div class="panel">
+      <div class="panel-head"><h2>Status Action</h2></div>
+      <form method="post" action="/loads/{{ load.id }}/advance"><button class="btn-primary w-full">Advance to {{ next_status }}</button></form>
+    </div>
+    {% endif %}
+    {% if 'pod.upload' in permissions %}
+    <div class="panel">
+      <div class="panel-head"><h2>POD</h2></div>
+      {% for pod in load.pods %}<div class="text-sm rounded-md border p-2 mb-2">{{ pod.filename }} - {{ pod.created_at.strftime('%Y-%m-%d') }}</div>{% endfor %}
+      <form class="space-y-3" method="post" action="/loads/{{ load.id }}/pod" enctype="multipart/form-data">
+        <input class="input" type="file" name="file">
+        <button class="btn-secondary w-full">Upload POD</button>
+      </form>
+    </div>
+    {% endif %}
+  </aside>
+</section>
+{% endblock %}

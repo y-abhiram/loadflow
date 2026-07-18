@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <p class="eyebrow">Carrier Operations</p>
+    <h1 class="page-title">Assigned freight</h1>
+  </div>
+</header>
+<section class="panel mx-8">
+  {% include "_load_table.html" %}
+</section>
+{% endblock %}

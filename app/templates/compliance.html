@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <p class="eyebrow">Compliance</p>
+    <h1 class="page-title">Carrier authority and insurance</h1>
+  </div>
+</header>
+<section class="content-grid">
+  <div class="panel lg:col-span-2">
+    <div class="panel-head"><h2>Records</h2></div>
+    <div class="space-y-4">
+      {% for record in records %}
+      <form class="grid grid-cols-1 md:grid-cols-5 gap-3 rounded-md border p-3" method="post" action="/compliance/{{ record.id }}">
+        <div class="md:col-span-5 font-medium">{{ record.carrier_org.name }}</div>
+        <input class="input" type="date" name="insurance_expiry" value="{{ record.insurance_expiry.isoformat() }}">
+        <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="authority_active" {% if record.authority_active %}checked{% endif %}> Authority active</label>
+        <input class="input" name="approved_equipment" value="{{ record.approved_equipment }}">
+        <input class="input" name="approved_commodities" value="{{ record.approved_commodities }}">
+        <button class="btn-secondary">Save</button>
+      </form>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h2>Renewal Alerts</h2></div>
+    <div class="space-y-3">
+      {% for record in expiring %}
+      <div class="rounded-md bg-amber-50 border border-amber-200 p-3 text-sm">
+        <div class="font-medium">{{ record.carrier_org.name }}</div>
+        <div>Insurance expires {{ record.insurance_expiry.isoformat() }}</div>
+      </div>
+      {% else %}
+      <p class="text-sm text-slate-600">No insurance policies expiring in 30 days.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

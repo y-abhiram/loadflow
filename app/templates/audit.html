@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <p class="eyebrow">Audit</p>
+    <h1 class="page-title">Activity and denied attempts</h1>
+  </div>
+</header>
+<section class="content-grid">
+  <div class="panel">
+    <div class="panel-head"><h2>Load Events</h2></div>
+    <div class="space-y-3">
+      {% for event in events %}
+      <div class="rounded-md border p-3 text-sm">
+        <div class="font-medium">{{ event.event_type.replace('_', ' ')|title }} - {{ event.load.reference }}</div>
+        <div class="text-slate-600">{{ event.actor.name }} - {{ event.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+        {% if event.note %}<div class="mt-1">{{ event.note }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h2>Permission Denials</h2></div>
+    <div class="space-y-3">
+      {% for item in denied %}
+      <div class="rounded-md border border-red-200 bg-red-50 p-3 text-sm">
+        <div class="font-medium text-red-900">{{ item.user.email if item.user else 'anonymous' }}</div>
+        <div class="text-red-700">{{ item.reason }}</div>
+        <div class="text-red-600">{{ item.path }} - {{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+      </div>
+      {% else %}
+      <p class="text-sm text-slate-600">No denied attempts logged yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

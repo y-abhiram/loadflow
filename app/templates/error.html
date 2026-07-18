@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="min-h-screen grid place-items-center px-6">
+  <div class="max-w-lg bg-white border border-slate-200 p-8">
+    <p class="eyebrow">{{ status_code }}</p>
+    <h1 class="page-title">Access blocked</h1>
+    <p class="mt-3 text-slate-700">{{ detail }}</p>
+    <a class="btn-primary mt-6 inline-block" href="/dashboard">Back to dashboard</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <p class="eyebrow">Load Board</p>
+    <h1 class="page-title">Search and filter loads</h1>
+  </div>
+  {% if 'load.create' in permissions %}<a class="btn-primary" href="/loads/new">Create Load</a>{% endif %}
+</header>
+<section class="panel mx-8">
+  <form class="grid grid-cols-1 md:grid-cols-[1fr_220px_auto] gap-3 mb-5" method="get">
+    <input class="input" name="q" value="{{ q }}" placeholder="Search reference, lane, commodity">
+    <select class="input" name="status">
+      <option value="">All statuses</option>
+      {% for item in statuses %}<option value="{{ item }}" {% if status == item %}selected{% endif %}>{{ item }}</option>{% endfor %}
+    </select>
+    <button class="btn-secondary">Filter</button>
+  </form>
+  {% include "_load_table.html" %}
+</section>
+{% endblock %}

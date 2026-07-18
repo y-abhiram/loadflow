@@ -1,0 +1,36 @@
+<div class="overflow-x-auto">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Load</th>
+        <th>Lane</th>
+        <th>Shipper</th>
+        <th>Carrier</th>
+        <th>Status</th>
+        <th>Compliance</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for load in loads %}
+      <tr onclick="window.location='/loads/{{ load.id }}'">
+        <td class="font-medium">{{ load.reference }}</td>
+        <td>{{ load.origin }} to {{ load.destination }}</td>
+        <td>{{ load.shipper.company_name }}</td>
+        <td>{{ load.carrier_org.name if load.carrier_org else 'Unassigned' }}</td>
+        <td><span class="badge">{{ load.status }}</span></td>
+        <td>
+          {% if load.compliance_flag and not load.compliance_overridden %}
+          <span class="badge-danger">Flagged</span>
+          {% elif load.compliance_overridden %}
+          <span class="badge-warn">Overridden</span>
+          {% else %}
+          <span class="badge-good">Clear</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="text-center text-slate-500 py-8">No loads found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

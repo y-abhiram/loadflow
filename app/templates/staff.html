@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <p class="eyebrow">RBAC</p>
+    <h1 class="page-title">Staff and custom roles</h1>
+  </div>
+</header>
+<section class="content-grid">
+  <div class="panel">
+    <div class="panel-head"><h2>Create Role</h2></div>
+    <form class="space-y-4" method="post" action="/roles">
+      <input class="input" name="name" placeholder="Ops Lead" required>
+      <div class="space-y-2">
+        {% for permission in catalog %}
+        <label class="flex gap-2 text-sm"><input type="checkbox" name="permission_codes" value="{{ permission.code }}"> <span><strong>{{ permission.code }}</strong> - {{ permission.label }}</span></label>
+        {% endfor %}
+      </div>
+      <button class="btn-primary">Create Role</button>
+    </form>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h2>Create Staff</h2></div>
+    <form class="space-y-4" method="post" action="/staff">
+      <input class="input" name="name" placeholder="Staff name" required>
+      <input class="input" name="email" type="email" placeholder="staff@company.test" required>
+      <select class="input" name="role_id">
+        {% for role in roles %}<option value="{{ role.id }}">{{ role.name }}</option>{% endfor %}
+      </select>
+      <button class="btn-primary">Create Staff</button>
+    </form>
+  </div>
+  <div class="panel lg:col-span-2">
+    <div class="panel-head"><h2>Current Staff</h2></div>
+    <table class="table">
+      <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Admin</th></tr></thead>
+      <tbody>
+        {% for item in staff %}
+        <tr><td>{{ item.user.name }}</td><td>{{ item.user.email }}</td><td>{{ item.role.name if item.role else 'Admin full catalog' }}</td><td>{{ 'Yes' if item.is_admin else 'No' }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

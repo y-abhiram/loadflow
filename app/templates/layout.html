@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LoadFlow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body class="bg-slate-100 text-slate-950">
+    <div class="min-h-screen">
+      {% if user %}
+      <aside class="fixed inset-y-0 left-0 w-64 bg-slate-950 text-white">
+        <div class="px-5 py-5 border-b border-white/10">
+          <div class="text-xl font-semibold tracking-tight">LoadFlow</div>
+          <div class="text-xs text-slate-300 mt-1">{{ user.account_type|title }} workspace</div>
+        </div>
+        <nav class="px-3 py-4 text-sm space-y-1">
+          <a class="nav-link" href="/dashboard">Dashboard</a>
+          <a class="nav-link" href="/loads">Loads</a>
+          <a class="nav-link" href="/compliance">Compliance</a>
+          {% if 'staff.manage' in permissions %}<a class="nav-link" href="/staff">Staff & Roles</a>{% endif %}
+          <a class="nav-link" href="/audit">Audit Log</a>
+        </nav>
+        <form class="absolute bottom-4 left-3 right-3" method="post" action="/logout">
+          <div class="mb-3 rounded-md bg-white/5 px-3 py-2 text-xs">
+            <div class="font-medium text-white">{{ user.name }}</div>
+            <div class="text-slate-300 break-all">{{ user.email }}</div>
+            {% if membership %}<div class="mt-1 text-slate-400">{{ membership.org.name }}{% if membership.is_admin %} - Admin{% endif %}</div>{% endif %}
+          </div>
+          <button class="w-full rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-950">Sign out</button>
+        </form>
+      </aside>
+      <main class="pl-64">
+      {% else %}
+      <main>
+      {% endif %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </body>
+</html>

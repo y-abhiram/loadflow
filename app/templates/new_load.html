@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="page-header">
+  <div>
+    <p class="eyebrow">New Load</p>
+    <h1 class="page-title">Post freight</h1>
+  </div>
+</header>
+<section class="panel mx-8 max-w-3xl">
+  <form class="grid grid-cols-1 md:grid-cols-2 gap-4" method="post" action="/loads">
+    <label class="field">Shipper
+      <select class="input" name="shipper_id" required>
+        {% for shipper in shippers %}<option value="{{ shipper.id }}">{{ shipper.company_name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="field">Equipment
+      <input class="input" name="equipment_type" value="Dry Van" required>
+    </label>
+    <label class="field">Origin
+      <input class="input" name="origin" value="Dallas, TX" required>
+    </label>
+    <label class="field">Destination
+      <input class="input" name="destination" value="Atlanta, GA" required>
+    </label>
+    <label class="field md:col-span-2">Commodity
+      <input class="input" name="commodity_type" value="Retail Goods" required>
+    </label>
+    <div class="md:col-span-2 flex gap-3">
+      <button class="btn-primary">Create Load</button>
+      <a class="btn-secondary" href="/loads">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

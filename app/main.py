@@ -10,7 +10,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from app.auth.dependencies import current_user
 from app.auth.security import hash_password, verify_password
-from app.database import Base, engine, get_db
+from app.database import Base, SessionLocal, engine, get_db
 from app.loads.service import assign_carrier, audit, confirm_rate
 from app.loads.state_machine import next_status
 from app.models import (
@@ -31,8 +31,12 @@ from app.models import (
 )
 from app.rbac.dependencies import active_membership, ensure_can_access_load, require_permission, user_permissions
 from app.rbac.permissions import PERMISSION_CATALOG
+from seed import seed_demo_data
 
 Base.metadata.create_all(bind=engine)
+with SessionLocal() as startup_db:
+    seed_demo_data(startup_db)
+    startup_db.commit()
 
 app = FastAPI(title="LoadFlow")
 app.add_middleware(SessionMiddleware, secret_key="loadflow-dev-secret-change-me")

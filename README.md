@@ -20,6 +20,59 @@ FastAPI, SQLAlchemy, SQLite, Jinja templates, and Tailwind via CDN.
 
 I chose this stack because the assessment is business-logic heavy. FastAPI makes server-side permission enforcement, compliance checks, state transitions, and audit logging easy to inspect while still delivering a usable web interface.
 
+## Technologies Used
+
+| Technology | Purpose |
+| --- | --- |
+| Python | Main backend language |
+| FastAPI | Web framework, routing, request handling, and server-side enforcement |
+| SQLAlchemy | ORM for database models and queries |
+| SQLite | Lightweight relational database for the demo |
+| Jinja2 | Server-rendered HTML templates |
+| Tailwind CSS CDN | Styling and responsive UI |
+| Starlette Sessions | Cookie-based login session handling |
+| Passlib + bcrypt | Password hashing for demo users |
+| Uvicorn | Local ASGI development server |
+| Vercel | Hosted deployed demo |
+
+## Project Structure
+
+```text
+loadflow/
+|-- app/
+|   |-- auth/
+|   |   |-- dependencies.py      # Current-user dependency
+|   |   `-- security.py          # Password hashing and verification
+|   |-- loads/
+|   |   |-- service.py           # Load assignment, compliance evaluation, rate confirmation
+|   |   `-- state_machine.py     # Allowed load status transitions
+|   |-- rbac/
+|   |   |-- dependencies.py      # Permission checks, scoping checks, denial logging
+|   |   `-- permissions.py       # Fixed permission catalog
+|   |-- static/
+|   |   `-- styles.css           # Custom UI styles on top of Tailwind
+|   |-- templates/
+|   |   |-- layout.html          # Shared layout/sidebar
+|   |   |-- login.html           # Demo login/sign-in screen
+|   |   |-- broker_dashboard.html
+|   |   |-- carrier_dashboard.html
+|   |   |-- shipper_dashboard.html
+|   |   |-- loads.html           # Searchable load board
+|   |   |-- load_detail.html     # Load workflow, compliance, rate, POD, audit timeline
+|   |   |-- new_load.html
+|   |   |-- staff.html           # Staff and custom role management
+|   |   |-- compliance.html      # Carrier compliance records and alerts
+|   |   `-- audit.html           # Audit events and permission-denied attempts
+|   |-- database.py              # SQLite engine/session setup
+|   |-- main.py                  # FastAPI app and route handlers
+|   `-- models.py                # SQLAlchemy data model
+|-- seed.py                      # Bootstrap/demo data
+|-- requirements.txt             # Python dependencies
+|-- pyproject.toml               # Vercel FastAPI entrypoint
+|-- demo.webm                    # Local walkthrough recording copy
+`-- README.md
+```
+
 ## How LoadFlow Works
 
 1. A broker creates a load for a shipper.

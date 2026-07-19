@@ -10,9 +10,9 @@ The project focuses on real business rules: custom RBAC, organization scoping, o
 
 ## Links
 
-- Repository: `https://github.com/y-abhiram/loadflow`
-- Deployed app: `https://loadflow-opal.vercel.app`
-- Walkthrough video: [`demo.webm`](demo.webm)
+- Repository: [github.com/y-abhiram/loadflow](https://github.com/y-abhiram/loadflow)
+- Deployed app: [loadflow-opal.vercel.app](https://loadflow-opal.vercel.app)
+- Walkthrough video: [Google Drive demo video](https://drive.google.com/file/d/14ODQufjMY0ymm6R4CgAoIdWoNzh3qlkg/view?usp=sharing)
 
 ## Stack
 
@@ -240,7 +240,7 @@ demo123
 ```
 
 
-5. Open `LF-00002` and click `Override Flag`.
+
 
 The Ops Lead can do this because their role includes:
 

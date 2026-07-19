@@ -12,7 +12,7 @@ The project focuses on real business rules: custom RBAC, organization scoping, o
 
 - Repository: `https://github.com/y-abhiram/loadflow`
 - Deployed app: `https://loadflow-opal.vercel.app`
-- Walkthrough video: `PASTE_LOOM_OR_SCREEN_RECORDING_LINK_HERE`
+- Walkthrough video: [`demo.webm`](demo.webm)
 
 ## Stack
 
@@ -238,6 +238,7 @@ So the backend blocks restricted progression/override attempts.
 opslead@loadflow.test
 demo123
 ```
+
 
 5. Open `LF-00002` and click `Override Flag`.
 
